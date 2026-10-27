@@ -51,8 +51,8 @@ def mode_time(EventFlow, events, warmups, repeats):
         start = time.perf_counter()
         reports = run_once(EventFlow, events)
         samples.append(time.perf_counter() - start)
-    return {"samples_s": [round(s, 4) for s in samples],
-            "median_s": round(statistics.median(samples), 4),
+    return {"samples_s": [round(s, 6) for s in samples],
+            "median_s": round(statistics.median(samples), 6),
             "digest": digest(reports)}
 
 
