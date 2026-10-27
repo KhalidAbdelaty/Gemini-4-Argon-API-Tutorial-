@@ -1,0 +1,38 @@
+--- a/eventflow/session.py
++++ b/eventflow/session.py
+@@ -16,7 +16,18 @@
+     def __init__(self, customer_id: str):
+         self.customer_id = customer_id
+         self._events = []
+-        self.summary = summarize([])
++        self._event_ids = set()
++        self._summary = None
++
++    @property
++    def summary(self):
++        if self._summary is None:
++            self._summary = summarize(self._events)
++        return self._summary
++
++    @summary.setter
++    def summary(self, value):
++        self._summary = value
+ 
+     def get_history(self):
+         """Return a snapshot of this customer's events in processing order.
+@@ -27,8 +38,12 @@
+         return copy.deepcopy(self._events)
+ 
+     def has_event(self, event_id: str) -> bool:
+-        return any(e.event_id == event_id for e in self.get_history())
++        return event_id in self._event_ids
+ 
+     def add(self, event) -> None:
+-        bisect.insort(self._events, event, key=_order_key)
+-        self.summary = summarize(self.get_history())
++        self._event_ids.add(event.event_id)
++        if not self._events or _order_key(event) >= _order_key(self._events[-1]):
++            self._events.append(event)
++        else:
++            bisect.insort(self._events, event, key=_order_key)
++        self._summary = None

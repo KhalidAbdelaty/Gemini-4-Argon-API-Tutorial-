@@ -1,0 +1,26 @@
+{
+  "drop_deep_copy": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.08s"
+    },
+    "hidden_passed": 12,
+    "hidden_total": 13,
+    "hidden_failures": [
+      "history_snapshot_owned_by_caller"
+    ]
+  },
+  "stale_summary": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.07s"
+    },
+    "hidden_passed": 10,
+    "hidden_total": 13,
+    "hidden_failures": [
+      "incremental_batches_with_reports",
+      "late_batch_with_earlier_timestamps",
+      "history_snapshot_owned_by_caller"
+    ]
+  }
+}

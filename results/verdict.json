@@ -1,0 +1,224 @@
+{
+  "medium_run1": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.03s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 15.91,
+      "long": 700.72,
+      "mixed": 71.64
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.2
+      ],
+      "long": [
+        884.6,
+        569.6
+      ],
+      "mixed": [
+        2540.0,
+        2517.2
+      ]
+    }
+  },
+  "medium_run2": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.03s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 15.02,
+      "long": 677.37,
+      "mixed": 66.7
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.2
+      ],
+      "long": [
+        884.6,
+        569.6
+      ],
+      "mixed": [
+        2540.0,
+        2522.1
+      ]
+    }
+  },
+  "medium_run3": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.03s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 14.82,
+      "long": 655.52,
+      "mixed": 65.35
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.2
+      ],
+      "long": [
+        884.6,
+        569.6
+      ],
+      "mixed": [
+        2540.0,
+        2522.1
+      ]
+    }
+  },
+  "high_run1": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.03s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 16.33,
+      "long": 812.84,
+      "mixed": 78.0
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.1
+      ],
+      "long": [
+        884.6,
+        569.1
+      ],
+      "mixed": [
+        2540.0,
+        2517.0
+      ]
+    }
+  },
+  "high_run2": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.03s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 17.35,
+      "long": 812.84,
+      "mixed": 78.0
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.1
+      ],
+      "long": [
+        884.6,
+        569.1
+      ],
+      "mixed": [
+        2540.0,
+        2517.0
+      ]
+    }
+  },
+  "high_run3": {
+    "visible_tests": {
+      "exit_code": 0,
+      "summary": "11 passed in 0.04s"
+    },
+    "hidden_passed": 13,
+    "hidden_total": 13,
+    "hidden_failures": [],
+    "speedup": {
+      "short": 16.45,
+      "long": 812.84,
+      "mixed": 76.76
+    },
+    "checks": {
+      "long_speedup_at_least_1.5x": true,
+      "short_within_5pct": true,
+      "mixed_within_5pct": true,
+      "visible_tests_pass": true,
+      "hidden_cases_pass": true,
+      "benchmark_outputs_match": true
+    },
+    "accepted": true,
+    "memory_kib": {
+      "short": [
+        7107.8,
+        7822.1
+      ],
+      "long": [
+        884.6,
+        569.1
+      ],
+      "mixed": [
+        2540.0,
+        2517.0
+      ]
+    }
+  }
+}

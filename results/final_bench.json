@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "python": "3.13.17",
+    "machine": "x86_64",
+    "system": "Linux",
+    "runs_per_workload": 9,
+    "method": "fresh process per run; 1 in-process warm-up; time.perf_counter(); tracemalloc in a separate process"
+  },
+  "results": {
+    "baseline": {
+      "short": {
+        "median_s": 0.6697,
+        "min_s": 0.5808,
+        "max_s": 0.7063,
+        "runs": 9,
+        "samples_s": [
+          0.6448,
+          0.6867,
+          0.6439,
+          0.6584,
+          0.6984,
+          0.6697,
+          0.7063,
+          0.5808,
+          0.6759
+        ],
+        "peak_tracked_kib": 7107.8,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 2.0321,
+        "min_s": 1.8869,
+        "max_s": 2.0924,
+        "runs": 9,
+        "samples_s": [
+          1.9754,
+          2.0321,
+          1.8869,
+          2.0476,
+          2.092,
+          1.9935,
+          1.9069,
+          2.0924,
+          2.0646
+        ],
+        "peak_tracked_kib": 884.6,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.9672,
+        "min_s": 0.9313,
+        "max_s": 1.0098,
+        "runs": 9,
+        "samples_s": [
+          0.9703,
+          0.9313,
+          0.9632,
+          0.9672,
+          0.9722,
+          0.9429,
+          1.0098,
+          0.9644,
+          0.9849
+        ],
+        "peak_tracked_kib": 2540.0,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "medium_run1": {
+      "short": {
+        "median_s": 0.0421,
+        "min_s": 0.0387,
+        "max_s": 0.0502,
+        "runs": 9,
+        "samples_s": [
+          0.0454,
+          0.0391,
+          0.0387,
+          0.0428,
+          0.0485,
+          0.0421,
+          0.0401,
+          0.0417,
+          0.0502
+        ],
+        "peak_tracked_kib": 7822.2,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.0029,
+        "min_s": 0.0026,
+        "max_s": 0.0047,
+        "runs": 9,
+        "samples_s": [
+          0.0031,
+          0.0047,
+          0.0026,
+          0.0027,
+          0.0041,
+          0.0028,
+          0.0029,
+          0.0031,
+          0.0028
+        ],
+        "peak_tracked_kib": 569.6,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0135,
+        "min_s": 0.0128,
+        "max_s": 0.0201,
+        "runs": 9,
+        "samples_s": [
+          0.0134,
+          0.0139,
+          0.0201,
+          0.0133,
+          0.0144,
+          0.0128,
+          0.0141,
+          0.0135,
+          0.0128
+        ],
+        "peak_tracked_kib": 2517.2,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "medium_run2": {
+      "short": {
+        "median_s": 0.0446,
+        "min_s": 0.0413,
+        "max_s": 0.0486,
+        "runs": 9,
+        "samples_s": [
+          0.0446,
+          0.0416,
+          0.0464,
+          0.0446,
+          0.0483,
+          0.0444,
+          0.0413,
+          0.0461,
+          0.0486
+        ],
+        "peak_tracked_kib": 7822.2,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.003,
+        "min_s": 0.0025,
+        "max_s": 0.0051,
+        "runs": 9,
+        "samples_s": [
+          0.0035,
+          0.0051,
+          0.003,
+          0.0025,
+          0.003,
+          0.003,
+          0.003,
+          0.0031,
+          0.0032
+        ],
+        "peak_tracked_kib": 569.6,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0145,
+        "min_s": 0.0133,
+        "max_s": 0.015,
+        "runs": 9,
+        "samples_s": [
+          0.0145,
+          0.0142,
+          0.0133,
+          0.0144,
+          0.0145,
+          0.0147,
+          0.015,
+          0.0142,
+          0.0147
+        ],
+        "peak_tracked_kib": 2522.1,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "medium_run3": {
+      "short": {
+        "median_s": 0.0452,
+        "min_s": 0.0421,
+        "max_s": 0.0568,
+        "runs": 9,
+        "samples_s": [
+          0.044,
+          0.0421,
+          0.0502,
+          0.0568,
+          0.0505,
+          0.0494,
+          0.0439,
+          0.0452,
+          0.0431
+        ],
+        "peak_tracked_kib": 7822.2,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.0031,
+        "min_s": 0.0029,
+        "max_s": 0.0033,
+        "runs": 9,
+        "samples_s": [
+          0.0032,
+          0.0031,
+          0.0031,
+          0.0032,
+          0.0032,
+          0.0031,
+          0.0029,
+          0.003,
+          0.0033
+        ],
+        "peak_tracked_kib": 569.6,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0148,
+        "min_s": 0.0133,
+        "max_s": 0.016,
+        "runs": 9,
+        "samples_s": [
+          0.0147,
+          0.0133,
+          0.0136,
+          0.0149,
+          0.015,
+          0.0146,
+          0.016,
+          0.0154,
+          0.0148
+        ],
+        "peak_tracked_kib": 2522.1,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "high_run1": {
+      "short": {
+        "median_s": 0.041,
+        "min_s": 0.0371,
+        "max_s": 0.0537,
+        "runs": 9,
+        "samples_s": [
+          0.0419,
+          0.0371,
+          0.0405,
+          0.0416,
+          0.0414,
+          0.041,
+          0.0537,
+          0.0391,
+          0.0398
+        ],
+        "peak_tracked_kib": 7822.1,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.0025,
+        "min_s": 0.0024,
+        "max_s": 0.0029,
+        "runs": 9,
+        "samples_s": [
+          0.0027,
+          0.0025,
+          0.0025,
+          0.0025,
+          0.0029,
+          0.0027,
+          0.0024,
+          0.0025,
+          0.0027
+        ],
+        "peak_tracked_kib": 569.1,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0124,
+        "min_s": 0.011,
+        "max_s": 0.0146,
+        "runs": 9,
+        "samples_s": [
+          0.0132,
+          0.0141,
+          0.011,
+          0.013,
+          0.0123,
+          0.0146,
+          0.0121,
+          0.0121,
+          0.0124
+        ],
+        "peak_tracked_kib": 2517.0,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "high_run2": {
+      "short": {
+        "median_s": 0.0386,
+        "min_s": 0.0334,
+        "max_s": 0.0495,
+        "runs": 9,
+        "samples_s": [
+          0.0365,
+          0.0334,
+          0.0386,
+          0.0398,
+          0.0392,
+          0.0383,
+          0.0495,
+          0.0462,
+          0.0336
+        ],
+        "peak_tracked_kib": 7822.1,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.0025,
+        "min_s": 0.0023,
+        "max_s": 0.0027,
+        "runs": 9,
+        "samples_s": [
+          0.0026,
+          0.0025,
+          0.0025,
+          0.0024,
+          0.0025,
+          0.0023,
+          0.0024,
+          0.0027,
+          0.0025
+        ],
+        "peak_tracked_kib": 569.1,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0124,
+        "min_s": 0.0121,
+        "max_s": 0.0138,
+        "runs": 9,
+        "samples_s": [
+          0.0125,
+          0.0132,
+          0.0138,
+          0.0124,
+          0.0123,
+          0.0121,
+          0.0122,
+          0.0121,
+          0.0128
+        ],
+        "peak_tracked_kib": 2517.0,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    },
+    "high_run3": {
+      "short": {
+        "median_s": 0.0407,
+        "min_s": 0.0362,
+        "max_s": 0.0558,
+        "runs": 9,
+        "samples_s": [
+          0.0423,
+          0.0384,
+          0.0362,
+          0.0398,
+          0.0386,
+          0.0475,
+          0.0558,
+          0.0407,
+          0.0418
+        ],
+        "peak_tracked_kib": 7822.1,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 0.0025,
+        "min_s": 0.0024,
+        "max_s": 0.0026,
+        "runs": 9,
+        "samples_s": [
+          0.0025,
+          0.0025,
+          0.0024,
+          0.0024,
+          0.0026,
+          0.0024,
+          0.0026,
+          0.0026,
+          0.0026
+        ],
+        "peak_tracked_kib": 569.1,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 0.0126,
+        "min_s": 0.0105,
+        "max_s": 0.015,
+        "runs": 9,
+        "samples_s": [
+          0.0105,
+          0.0135,
+          0.0114,
+          0.0123,
+          0.0127,
+          0.0135,
+          0.0126,
+          0.0123,
+          0.015
+        ],
+        "peak_tracked_kib": 2517.0,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    }
+  }
+}

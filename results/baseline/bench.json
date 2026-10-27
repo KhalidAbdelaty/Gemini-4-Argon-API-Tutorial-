@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "python": "3.13.17",
+    "machine": "x86_64",
+    "system": "Linux",
+    "runs_per_workload": 9,
+    "method": "fresh process per run; 1 in-process warm-up; time.perf_counter(); tracemalloc in a separate process"
+  },
+  "results": {
+    "baseline": {
+      "short": {
+        "median_s": 0.6733,
+        "min_s": 0.6603,
+        "max_s": 0.9549,
+        "runs": 9,
+        "samples_s": [
+          0.6603,
+          0.6673,
+          0.7108,
+          0.6733,
+          0.6727,
+          0.6614,
+          0.7159,
+          0.9549,
+          0.9001
+        ],
+        "peak_tracked_kib": 7107.8,
+        "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+      },
+      "long": {
+        "median_s": 2.2426,
+        "min_s": 2.0172,
+        "max_s": 3.0142,
+        "runs": 9,
+        "samples_s": [
+          2.1991,
+          2.4173,
+          2.2426,
+          2.057,
+          2.0172,
+          2.1279,
+          2.3112,
+          2.6688,
+          3.0142
+        ],
+        "peak_tracked_kib": 884.6,
+        "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+      },
+      "mixed": {
+        "median_s": 1.0382,
+        "min_s": 0.984,
+        "max_s": 1.0913,
+        "runs": 9,
+        "samples_s": [
+          1.0382,
+          0.984,
+          0.984,
+          1.03,
+          1.0504,
+          1.0258,
+          1.0844,
+          1.0607,
+          1.0913
+        ],
+        "peak_tracked_kib": 2540.0,
+        "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+      }
+    }
+  }
+}

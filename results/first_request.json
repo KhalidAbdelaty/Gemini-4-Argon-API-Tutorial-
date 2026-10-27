@@ -1,0 +1,27 @@
+{
+  "prompt": "This cProfile excerpt comes from a Python app that turns customer events into reports. It is correct but slow on long customer histories.\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.000    0.000   13.696   13.696 <bench>/runner.py:34(run_once)\n        1    0.005    0.005   13.696   13.696 eventflow/engine.py:28(ingest)\n     2560    0.026    0.000   13.442    0.005 eventflow/session.py:21(get_history)\n6146560/2560    6.349    0.000   13.416    0.005 <stdlib>/copy.py:119(deepcopy)\n207360/2560    0.304    0.000   13.409    0.005 <stdlib>/copy.py:192(_deepcopy_list)\n   204800    0.557    0.000   12.053    0.000 <stdlib>/copy.py:248(_reconstruct)\n614400/204800    1.719    0.000   10.278    0.000 <stdlib>/copy.py:218(_deepcopy_dict)\n     1280    0.022    0.000    6.951    0.005 eventflow/session.py:32(add)\n\nIn three short bullets: what the profile shows, what you would read next in the code, and what this evidence alone does not prove.",
+  "output_text": "* **What the profile shows:** Almost the entire runtime (13.4s out of 13.7s) is spent inside `session.get_history`, which performs 2,560 top-level `copy.deepcopy` operations on growing lists of objects (`_reconstruct` and `_deepcopy_dict`). Because `session.add` is called 1,280 times and accounts for half the runtime, `get_history` is likely being called twice per event, resulting in quadratic $O(N^2)$ time complexity as the history lengthens.\n* **What to read next:** Inspect `eventflow/session.py` (around lines 21 and 32) and `eventflow/engine.py` (around line 28) to see why `get_history()` returns a deep copy and why both `add()` and `ingest()` are repeatedly fetching the full history per event.\n* **What this does not prove:** The profile alone does not prove it is safe to simply remove `deepcopy` or cache the history list; callers might be mutating the returned events in-place, meaning a naive removal could break correctness by corrupting internal state.",
+  "status": "completed",
+  "seconds": 7.8,
+  "usage": {
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 484
+      }
+    ],
+    "output_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 256
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_input_tokens": 484,
+    "total_output_tokens": 256,
+    "total_thought_tokens": 0,
+    "total_tokens": 740,
+    "total_tool_use_tokens": 0
+  },
+  "cost_usd": 0.003528
+}

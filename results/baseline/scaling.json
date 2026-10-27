@@ -1,0 +1,26 @@
+[
+  {
+    "history_length": 20,
+    "customers": 80,
+    "events": 1600,
+    "median_s": 0.3366
+  },
+  {
+    "history_length": 40,
+    "customers": 40,
+    "events": 1600,
+    "median_s": 0.653
+  },
+  {
+    "history_length": 80,
+    "customers": 20,
+    "events": 1600,
+    "median_s": 1.3737
+  },
+  {
+    "history_length": 160,
+    "customers": 10,
+    "events": 1600,
+    "median_s": 2.665
+  }
+]

@@ -1,0 +1,27 @@
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   13.696   13.696 <bench>/runner.py:34(run_once)
+        1    0.005    0.005   13.696   13.696 eventflow/engine.py:28(ingest)
+     2560    0.026    0.000   13.442    0.005 eventflow/session.py:21(get_history)
+6146560/2560    6.349    0.000   13.416    0.005 <stdlib>/copy.py:119(deepcopy)
+207360/2560    0.304    0.000   13.409    0.005 <stdlib>/copy.py:192(_deepcopy_list)
+   204800    0.557    0.000   12.053    0.000 <stdlib>/copy.py:248(_reconstruct)
+614400/204800    1.719    0.000   10.278    0.000 <stdlib>/copy.py:218(_deepcopy_dict)
+     1280    0.022    0.000    6.951    0.005 eventflow/session.py:32(add)
+     1280    0.002    0.000    6.723    0.005 eventflow/session.py:29(has_event)
+ 12598161    1.716    0.000    1.716    0.000 {method 'get' of 'dict' objects}
+  8202240    0.891    0.000    0.891    0.000 {built-in method builtins.id}
+  1026560    0.479    0.000    0.736    0.000 <stdlib>/copy.py:232(_keep_alive)
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+6146560/2560    6.349    0.000   13.416    0.005 <stdlib>/copy.py:119(deepcopy)
+614400/204800    1.719    0.000   10.278    0.000 <stdlib>/copy.py:218(_deepcopy_dict)
+ 12598161    1.716    0.000    1.716    0.000 {method 'get' of 'dict' objects}
+  8202240    0.891    0.000    0.891    0.000 {built-in method builtins.id}
+   204800    0.557    0.000   12.053    0.000 <stdlib>/copy.py:248(_reconstruct)
+  5120000    0.486    0.000    0.486    0.000 <stdlib>/copy.py:173(_deepcopy_atomic)
+  1026560    0.479    0.000    0.736    0.000 <stdlib>/copy.py:232(_keep_alive)
+207360/2560    0.304    0.000   13.409    0.005 <stdlib>/copy.py:192(_deepcopy_list)
+  1444021    0.204    0.000    0.204    0.000 {method 'append' of 'list' objects}
+   204800    0.110    0.000    0.110    0.000 {method '__reduce_ex__' of 'object' objects}
+   409600    0.107    0.000    0.426    0.000 <stdlib>/copy.py:253(<genexpr>)
+     1288    0.104    0.000    0.159    0.000 eventflow/history.py:29(summarize)

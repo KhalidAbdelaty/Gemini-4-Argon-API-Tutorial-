@@ -1,0 +1,35 @@
+{
+  "thinking_level": "medium",
+  "model": "gemini-4-argon",
+  "stop_reason": "model finished",
+  "turns": 6,
+  "tool_calls": 25,
+  "tool_counts": {
+    "apply_patch": 1,
+    "list_files": 1,
+    "read_file": 9,
+    "run_benchmark": 6,
+    "run_profiler": 6,
+    "run_tests": 1,
+    "show_diff": 1
+  },
+  "patches_applied": 1,
+  "wall_clock_s": 122.3,
+  "usage_totals": {
+    "total_cached_tokens": 39661,
+    "total_input_tokens": 60792,
+    "total_output_tokens": 1727,
+    "total_thought_tokens": 0,
+    "total_tokens": 62519,
+    "total_tool_use_tokens": 0
+  },
+  "cost_usd_intro": 0.0635,
+  "cost_usd_from_dec_1": 0.127,
+  "final_report": "### Summary of Changes\n\nIn `eventflow/session.py` (`CustomerState`):\n1. **Eliminated internal `copy.deepcopy` and linear scans in `has_event`**:\n   - Previously, `has_event()` called `self.get_history()` (which deep-copied the entire event list and nested metadata dicts) and scanned it linearly on every incoming event.\n   - Added a `self._event_ids` set to track seen event IDs for $O(1)$ duplicate lookups without copying.\n2. **Lazily computed `summary` without deep-copying `_events`**:\n   - Previously, `CustomerState.add()` called `summarize(self.get_history())` on every event addition, causing $O(N^2)$ deep-copies and re-summarizations per customer during ingestion.\n   - Replaced `self.summary` with a cached property that computes `summarize(self._events)` on demand (since `summarize` does not mutate events) and invalidates the cached summary when `add()` is called.\n   - Added a fast path in `add()` to `append` directly when the incoming event is already in order relative to the last event, falling back to `bisect.insort` for out-of-order arrivals.\n   - `get_history()` continues to return `copy.deepcopy(self._events)` so external callers still receive an isolated snapshot as required by the public contract.\n\n### Benchmark Medians (Before vs. After)\n\n| Workload | Before Median (s) | After Median (s) | Speedup (vs. original baseline) | Output Matches Original |\n| :--- | ---: | ---: | ---: | :---: |\n| `short` | 0.6696s (orig: 0.6787s) | 0.0466s | ~14.6x | `true` |\n| `long` | 2.1080s (orig: 2.1408s) | 0.0030s | ~713.6x | `true` |\n| `mixed` | 1.1096s (orig: 1.0210s) | 0.0155s | ~65.9x | `true` |\n\nAll 11 visible tests pass.\n\n### Remaining Risks & Limitations\n- **External `history()` calls**: `CustomerState.get_history()` still performs `copy.deepcopy(self._events)` to satisfy the ownership/isolation contract when callers mutate returned events or their `metadata` dicts. If external callers invoke `engine.history()` in a tight loop on very large histories, that call remains $O(N)$ in history length.\n- **Interleaved `add()` and `report_for()` calls**: Because `summary` is invalidated on `add()` and recomputed lazily on read, alternating single-event `ingest()` and `report()` calls for the same customer will still recompute `summarize(self._events)` in $O(N)$ time, though without any `deepcopy` overhead.",
+  "limits": {
+    "max_turns": 40,
+    "max_patches": 10,
+    "max_wall_clock_s": 2700,
+    "max_spend_usd": 5.0
+  }
+}

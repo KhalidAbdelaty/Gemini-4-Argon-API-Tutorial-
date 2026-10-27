@@ -1,0 +1,65 @@
+--- a/eventflow/models.py
++++ b/eventflow/models.py
+@@ -3,6 +3,7 @@
+ from dataclasses import dataclass, field
+ 
+ KINDS = ("activity", "purchase", "refund")
++_KNOWN_FIELDS = frozenset(("event_id", "customer_id", "ts", "kind", "page", "amount_cents", "ref"))
+ 
+ 
+ class ValidationError(ValueError):
+@@ -53,8 +54,7 @@
+     if kind == "refund" and not ref:
+         raise ValidationError("refund events need a ref to a purchase")
+ 
+-    known = {"event_id", "customer_id", "ts", "kind", "page", "amount_cents", "ref"}
+-    metadata = {k: v for k, v in raw.items() if k not in known}
++    metadata = {k: v for k, v in raw.items() if k not in _KNOWN_FIELDS}
+     return Event(
+         event_id=str(raw["event_id"]),
+         customer_id=str(raw["customer_id"]),
+@@ -64,5 +64,5 @@
+         page=page,
+         amount_cents=amount if kind != "activity" else 0,
+         ref=ref,
+-        metadata=dict(metadata),
++        metadata=metadata,
+     )
+--- a/eventflow/session.py
++++ b/eventflow/session.py
+@@ -16,7 +16,18 @@
+     def __init__(self, customer_id: str):
+         self.customer_id = customer_id
+         self._events = []
+-        self.summary = summarize([])
++        self._event_ids = set()
++        self._summary = None
++
++    @property
++    def summary(self):
++        if self._summary is None:
++            self._summary = summarize(self._events)
++        return self._summary
++
++    @summary.setter
++    def summary(self, value):
++        self._summary = value
+ 
+     def get_history(self):
+         """Return a snapshot of this customer's events in processing order.
+@@ -27,8 +38,12 @@
+         return copy.deepcopy(self._events)
+ 
+     def has_event(self, event_id: str) -> bool:
+-        return any(e.event_id == event_id for e in self.get_history())
++        return event_id in self._event_ids
+ 
+     def add(self, event) -> None:
+-        bisect.insort(self._events, event, key=_order_key)
+-        self.summary = summarize(self.get_history())
++        self._event_ids.add(event.event_id)
++        if not self._events or (self._events[-1].ts, self._events[-1].seq) <= (event.ts, event.seq):
++            self._events.append(event)
++        else:
++            bisect.insort(self._events, event, key=_order_key)
++        self._summary = None

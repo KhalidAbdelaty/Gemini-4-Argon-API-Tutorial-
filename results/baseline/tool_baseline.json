@@ -1,0 +1,14 @@
+{
+  "short": {
+    "median_s": 0.6787,
+    "digest": "23696ec746bab48933ce540a4a517a6d45f464d0f56a23ed8c28d182833e57e1"
+  },
+  "long": {
+    "median_s": 2.1408,
+    "digest": "3bd9bb2fb9b2db761dfb7187714a116cc838c6377c7c8c373d002f3bd8aeb9fb"
+  },
+  "mixed": {
+    "median_s": 1.021,
+    "digest": "fbeb8453dd313eb8eca90e10e9767bc18700a02ed275d00ca7cd7550235b66b9"
+  }
+}

@@ -1,0 +1,28 @@
+PRIVATE. Never shown to the agent. The agent's tools cannot read evaluator/.
+
+Injected causes of the slowdown in starter/eventflow:
+
+1. Repeated history processing (session.py, CustomerState.add):
+   every accepted event re-runs history.summarize() over the customer's
+   entire history, so ingesting n events for one customer costs O(n^2).
+
+2. Unnecessary session-state copying (session.py, CustomerState.get_history):
+   get_history() deep-copies the whole history. Both has_event() (called by
+   engine.ingest for every raw event) and add() call it, so each event pays
+   for two full deep copies of everything before it.
+
+3. Linear duplicate check (session.py, CustomerState.has_event):
+   scans the copied history instead of a set of seen event ids.
+
+Traps that the visible tests do not cover, but the hidden cases do:
+
+- Removing the deep copy from get_history() breaks the documented contract
+  that history() returns a snapshot the caller owns.
+- Caching the summary without invalidating it on ingest returns stale
+  reports when ingest() is called after report().
+- Appending in arrival order (instead of keeping timestamp order) breaks
+  out-of-order and late-batch handling.
+
+A correct fix: keep a set of seen ids, keep the sorted insert, and compute
+the summary lazily from the internal list (no copy), invalidating it on add().
+get_history() keeps its deep copy for external callers.

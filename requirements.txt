@@ -1,0 +1,4 @@
+google-genai==2.33.0
+pytest==9.1.1
+python-dotenv==1.2.4
+# charts only: pip install matplotlib==3.11.2

@@ -1,0 +1,59 @@
+{
+  "candidate": "results/runs/medium_run3/candidate",
+  "passed": 13,
+  "total": 13,
+  "cases": {
+    "differential_seed_9101": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "differential_seed_9102": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "differential_seed_9103": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "long_history_differential": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "incremental_batches_with_reports": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "late_batch_with_earlier_timestamps": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "duplicates_first_copy_wins": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "equal_timestamps_keep_arrival_order": {
+      "passed": true,
+      "detail": "matches reference"
+    },
+    "history_snapshot_owned_by_caller": {
+      "passed": true,
+      "detail": "history snapshot isolated"
+    },
+    "reports_owned_by_caller": {
+      "passed": true,
+      "detail": "report objects isolated"
+    },
+    "raw_events_not_modified": {
+      "passed": true,
+      "detail": "inputs untouched"
+    },
+    "engines_are_isolated": {
+      "passed": true,
+      "detail": "engines independent"
+    },
+    "validation_still_raises": {
+      "passed": true,
+      "detail": "refund without ref rejected"
+    }
+  }
+}

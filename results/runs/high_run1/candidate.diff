@@ -1,0 +1,271 @@
+--- a/eventflow/history.py
++++ b/eventflow/history.py
+@@ -35,37 +35,64 @@
+     nothing left to apply counts as rejected. This function does not modify
+     the events it receives.
+     """
+-    summary = Summary()
++    sessions = []
++    purchases = {}
++    refunded = {}
++    gross_cents = 0
++    refunded_cents = 0
++    rejected_refunds = 0
++    page_counts = {}
++    num_events = 0
+     current = None
++
+     for event in events:
+-        summary.events += 1
+-        if summary.first_seen is None:
+-            summary.first_seen = event.ts
+-        summary.last_seen = event.ts
+-
+-        if current is not None and event.ts - current.end_ts <= SESSION_GAP_SECONDS:
+-            current.end_ts = event.ts
++        num_events += 1
++        ts = event.ts
++        if current is not None and ts - current.end_ts <= SESSION_GAP_SECONDS:
++            current.end_ts = ts
+             current.events += 1
+         else:
+-            current = Session(start_ts=event.ts, end_ts=event.ts, events=1)
+-            summary.sessions.append(current)
++            current = Session(start_ts=ts, end_ts=ts, events=1)
++            sessions.append(current)
+ 
+-        if event.kind == "activity":
++        kind = event.kind
++        if kind == "activity":
+             page = event.page.strip().lower()
+-            summary.page_counts[page] = summary.page_counts.get(page, 0) + 1
+-        elif event.kind == "purchase":
+-            summary.purchases[event.event_id] = event.amount_cents
+-            summary.gross_cents += event.amount_cents
+-        elif event.kind == "refund":
+-            original = summary.purchases.get(event.ref)
++            page_counts[page] = page_counts.get(page, 0) + 1
++        elif kind == "purchase":
++            amount = event.amount_cents
++            purchases[event.event_id] = amount
++            gross_cents += amount
++        elif kind == "refund":
++            ref = event.ref
++            original = purchases.get(ref)
+             if original is None:
+-                summary.rejected_refunds += 1
++                rejected_refunds += 1
+                 continue
+-            already = summary.refunded.get(event.ref, 0)
++            already = refunded.get(ref, 0)
+             applied = min(event.amount_cents, original - already)
+             if applied <= 0:
+-                summary.rejected_refunds += 1
++                rejected_refunds += 1
+                 continue
+-            summary.refunded[event.ref] = already + applied
+-            summary.refunded_cents += applied
+-    return summary
++            refunded[ref] = already + applied
++            refunded_cents += applied
++
++    if current is not None:
++        first_seen = sessions[0].start_ts
++        last_seen = current.end_ts
++    else:
++        first_seen = None
++        last_seen = None
++
++    return Summary(
++        sessions=sessions,
++        purchases=purchases,
++        refunded=refunded,
++        gross_cents=gross_cents,
++        refunded_cents=refunded_cents,
++        rejected_refunds=rejected_refunds,
++        page_counts=page_counts,
++        first_seen=first_seen,
++        last_seen=last_seen,
++        events=num_events,
++    )
+--- a/eventflow/models.py
++++ b/eventflow/models.py
+@@ -29,40 +29,46 @@
+     metadata: dict = field(default_factory=dict)
+ 
+ 
++_KNOWN_KEYS = frozenset(("event_id", "customer_id", "ts", "kind", "page", "amount_cents", "ref"))
++
++
+ def validate(raw: dict, seq: int) -> Event:
+     """Build an Event from a raw dict without modifying the dict."""
+-    for key in ("event_id", "customer_id", "ts", "kind"):
+-        if key not in raw:
+-            raise ValidationError(f"missing field: {key}")
+-    kind = raw["kind"]
++    try:
++        event_id = raw["event_id"]
++        customer_id = raw["customer_id"]
++        ts = raw["ts"]
++        kind = raw["kind"]
++    except KeyError as exc:
++        raise ValidationError(f"missing field: {exc.args[0]}") from None
++
+     if kind not in KINDS:
+         raise ValidationError(f"unknown kind: {kind!r}")
+-    ts = raw["ts"]
+     if not isinstance(ts, int) or ts < 0:
+         raise ValidationError("ts must be a non-negative integer")
+ 
+     page = raw.get("page")
+-    amount = raw.get("amount_cents", 0)
+     ref = raw.get("ref")
+     if kind == "activity":
+         if not isinstance(page, str) or not page.strip():
+             raise ValidationError("activity events need a page")
++        amount = 0
+     else:
++        amount = raw.get("amount_cents", 0)
+         if not isinstance(amount, int) or amount <= 0:
+             raise ValidationError(f"{kind} events need a positive amount_cents")
+-    if kind == "refund" and not ref:
+-        raise ValidationError("refund events need a ref to a purchase")
++        if kind == "refund" and not ref:
++            raise ValidationError("refund events need a ref to a purchase")
+ 
+-    known = {"event_id", "customer_id", "ts", "kind", "page", "amount_cents", "ref"}
+-    metadata = {k: v for k, v in raw.items() if k not in known}
++    metadata = {k: v for k, v in raw.items() if k not in _KNOWN_KEYS}
+     return Event(
+-        event_id=str(raw["event_id"]),
+-        customer_id=str(raw["customer_id"]),
++        event_id=str(event_id),
++        customer_id=str(customer_id),
+         ts=ts,
+         kind=kind,
+         seq=seq,
+         page=page,
+-        amount_cents=amount if kind != "activity" else 0,
++        amount_cents=amount,
+         ref=ref,
+-        metadata=dict(metadata),
++        metadata=metadata,
+     )
+--- a/eventflow/reports.py
++++ b/eventflow/reports.py
+@@ -23,17 +23,33 @@
+ def build_report(state) -> CustomerReport:
+     s = state.summary
+     sessions = s.sessions
+-    durations = [x.end_ts - x.start_ts for x in sessions]
++    num_sessions = len(sessions)
++    if num_sessions:
++        total_duration = 0
++        longest_session = 0
++        for x in sessions:
++            total_duration += x.end_ts - x.start_ts
++            if x.events > longest_session:
++                longest_session = x.events
++        avg_session_seconds = total_duration // num_sessions
++    else:
++        longest_session = 0
++        avg_session_seconds = 0
++
++    top_page = None
+     if s.page_counts:
+-        top_page = sorted(s.page_counts.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+-    else:
+-        top_page = None
++        top_count = -1
++        for page, count in s.page_counts.items():
++            if top_page is None or count > top_count or (count == top_count and page < top_page):
++                top_count = count
++                top_page = page
++
+     return CustomerReport(
+         customer_id=state.customer_id,
+         events=s.events,
+-        sessions=len(sessions),
+-        longest_session=max((x.events for x in sessions), default=0),
+-        avg_session_seconds=(sum(durations) // len(durations)) if durations else 0,
++        sessions=num_sessions,
++        longest_session=longest_session,
++        avg_session_seconds=avg_session_seconds,
+         purchases=len(s.purchases),
+         gross_cents=s.gross_cents,
+         refunded_cents=s.refunded_cents,
+@@ -47,12 +63,28 @@
+ 
+ def totals(reports: dict) -> dict:
+     """Roll customer reports up into one dict of totals."""
+-    keys = ("events", "sessions", "purchases", "gross_cents", "refunded_cents",
+-            "net_cents", "rejected_refunds")
+-    out = {k: 0 for k in keys}
++    events = 0
++    sessions = 0
++    purchases = 0
++    gross_cents = 0
++    refunded_cents = 0
++    net_cents = 0
++    rejected_refunds = 0
+     for report in reports.values():
+-        row = asdict(report)
+-        for k in keys:
+-            out[k] += row[k]
+-    out["customers"] = len(reports)
+-    return out
++        events += report.events
++        sessions += report.sessions
++        purchases += report.purchases
++        gross_cents += report.gross_cents
++        refunded_cents += report.refunded_cents
++        net_cents += report.net_cents
++        rejected_refunds += report.rejected_refunds
++    return {
++        "events": events,
++        "sessions": sessions,
++        "purchases": purchases,
++        "gross_cents": gross_cents,
++        "refunded_cents": refunded_cents,
++        "net_cents": net_cents,
++        "rejected_refunds": rejected_refunds,
++        "customers": len(reports),
++    }
+--- a/eventflow/session.py
++++ b/eventflow/session.py
+@@ -16,7 +16,18 @@
+     def __init__(self, customer_id: str):
+         self.customer_id = customer_id
+         self._events = []
+-        self.summary = summarize([])
++        self._event_ids = set()
++        self._summary = None
++
++    @property
++    def summary(self):
++        if self._summary is None:
++            self._summary = summarize(self._events)
++        return self._summary
++
++    @summary.setter
++    def summary(self, value):
++        self._summary = value
+ 
+     def get_history(self):
+         """Return a snapshot of this customer's events in processing order.
+@@ -27,8 +38,12 @@
+         return copy.deepcopy(self._events)
+ 
+     def has_event(self, event_id: str) -> bool:
+-        return any(e.event_id == event_id for e in self.get_history())
++        return event_id in self._event_ids
+ 
+     def add(self, event) -> None:
+-        bisect.insort(self._events, event, key=_order_key)
+-        self.summary = summarize(self.get_history())
++        self._event_ids.add(event.event_id)
++        if not self._events or (event.ts, event.seq) >= (self._events[-1].ts, self._events[-1].seq):
++            self._events.append(event)
++        else:
++            bisect.insort(self._events, event, key=_order_key)
++        self._summary = None

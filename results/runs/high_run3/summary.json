@@ -1,0 +1,35 @@
+{
+  "thinking_level": "high",
+  "model": "gemini-4-argon",
+  "stop_reason": "model finished",
+  "turns": 7,
+  "tool_calls": 38,
+  "tool_counts": {
+    "apply_patch": 5,
+    "list_files": 1,
+    "read_file": 9,
+    "run_benchmark": 12,
+    "run_profiler": 6,
+    "run_tests": 4,
+    "show_diff": 1
+  },
+  "patches_applied": 5,
+  "wall_clock_s": 310.1,
+  "usage_totals": {
+    "total_cached_tokens": 101531,
+    "total_input_tokens": 140154,
+    "total_output_tokens": 5164,
+    "total_thought_tokens": 13594,
+    "total_tokens": 158912,
+    "total_tool_use_tokens": 0
+  },
+  "cost_usd_intro": 0.275,
+  "cost_usd_from_dec_1": 0.55,
+  "final_report": "### Summary of Changes\n\n1. **Avoided redundant deep copies, linear scans, and eager summarization (`eventflow/session.py`)**\n   - Profiling showed 92%\u201398% of runtime across all workloads was spent in `CustomerState.get_history()` (`copy.deepcopy(self._events)`), called on every event by both `has_event()` and `add()`.\n   - Tracked seen event IDs per customer in a `set` (`self._event_ids`) so `has_event()` is an $O(1)$ lookup without copying event history.\n   - Passed `self._events` directly to `summarize()` (which does not mutate events) and made `CustomerState.summary` a cached property invalidated on `add()`, avoiding $O(N^2)$ re-summarization on every ingested event while still recomputing whenever `summary` or `report()` is requested after new events arrive.\n   - Added an $O(1)$ fast path in `add()` to append directly when an event arrives in timestamp/sequence order, falling back to `bisect.insort` only for out-of-order events.\n   - Preserved `copy.deepcopy(self._events)` in `get_history()` so caller-owned snapshots remain isolated from internal state.\n\n2. **Streamlined event validation (`eventflow/models.py`)**\n   - Hoisted `_KNOWN_FIELDS` to a module-level `frozenset` instead of allocating a new `set` on every `validate()` call.\n   - Removed the redundant `dict(metadata)` copy of an already freshly constructed dictionary comprehension and skipped looking up `amount_cents` on `\"activity\"` events.\n\n3. **Reduced per-event and per-report overhead (`eventflow/history.py`, `eventflow/reports.py`)**\n   - Used local variables inside `summarize()` before constructing `Summary` once at the end of the loop.\n   - Replaced multi-pass list/generator comprehensions and full sorting of `page_counts` in `build_report()` with single-pass loops, and replaced `dataclasses.asdict()` calls in `totals()` with direct attribute reads.\n\n---\n\n### Benchmark Medians (Before vs. After)\n\n| Workload | Before Median (s) | After Median (s) | Speedup vs. Original | Output Matches Original |\n| :--- | ---: | ---: | ---: | :---: |\n| `long` | 1.9953 (orig: 2.1408) | 0.0026 | ~823x | `true` |\n| `mixed` | 0.9702 (orig: 1.0210) | 0.0160 | ~64x | `true` |\n| `short` | 0.6613 (orig: 0.6787) | 0.0398 | ~17x | `true` |\n\nAll 11 visible pytest tests pass.\n\n---\n\n### Remaining Risks and Limitations\n\n- **Caller calls to `history()`**: `CustomerState.get_history()` still performs `copy.deepcopy(self._events)` to guarantee that mutating returned `Event` instances or their nested `metadata` dicts cannot affect engine state. Workloads that frequently call `engine.history()` on very long histories will still pay deep-copy cost.\n- **Interleaved out-of-order `ingest()` and `report_for()` calls**: Because `summarize()` processes a customer's full event list when `summary` is invalidated and subsequently read, alternating single-event `ingest()` and `report()` calls on a very large per-customer history remains $O(N)$ per report call (necessary in the general case because out-of-order timestamps can split sessions or alter refund application order).",
+  "limits": {
+    "max_turns": 40,
+    "max_patches": 10,
+    "max_wall_clock_s": 2700,
+    "max_spend_usd": 5.0
+  }
+}

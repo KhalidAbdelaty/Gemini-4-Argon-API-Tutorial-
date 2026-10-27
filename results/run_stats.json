@@ -1,0 +1,217 @@
+{
+  "runs": {
+    "high_run1": {
+      "level": "high",
+      "turns": 6,
+      "tool_calls": 34,
+      "patches": 4,
+      "wall_clock_s": 314.2,
+      "input": 122761,
+      "cached": 79707,
+      "output": 5024,
+      "thought": 17651,
+      "cost_intro": 0.3208,
+      "cost_dec1": 0.6417,
+      "changed_lines": 192,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 16.33,
+        "long": 812.84,
+        "mixed": 78.0
+      },
+      "median_s": {
+        "short": 0.041,
+        "long": 0.0025,
+        "mixed": 0.0124
+      }
+    },
+    "high_run2": {
+      "level": "high",
+      "turns": 6,
+      "tool_calls": 34,
+      "patches": 5,
+      "wall_clock_s": 276.8,
+      "input": 108707,
+      "cached": 70633,
+      "output": 5628,
+      "thought": 13047,
+      "cost_intro": 0.27,
+      "cost_dec1": 0.5399,
+      "changed_lines": 198,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 17.35,
+        "long": 812.84,
+        "mixed": 78.0
+      },
+      "median_s": {
+        "short": 0.0386,
+        "long": 0.0025,
+        "mixed": 0.0124
+      }
+    },
+    "high_run3": {
+      "level": "high",
+      "turns": 7,
+      "tool_calls": 38,
+      "patches": 5,
+      "wall_clock_s": 310.1,
+      "input": 140154,
+      "cached": 101531,
+      "output": 5164,
+      "thought": 13594,
+      "cost_intro": 0.275,
+      "cost_dec1": 0.55,
+      "changed_lines": 190,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 16.45,
+        "long": 812.84,
+        "mixed": 76.76
+      },
+      "median_s": {
+        "short": 0.0407,
+        "long": 0.0025,
+        "mixed": 0.0126
+      }
+    },
+    "medium_run1": {
+      "level": "medium",
+      "turns": 8,
+      "tool_calls": 36,
+      "patches": 4,
+      "wall_clock_s": 251.2,
+      "input": 107931,
+      "cached": 64658,
+      "output": 2422,
+      "thought": 3484,
+      "cost_intro": 0.1521,
+      "cost_dec1": 0.3041,
+      "changed_lines": 29,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 15.91,
+        "long": 700.72,
+        "mixed": 71.64
+      },
+      "median_s": {
+        "short": 0.0421,
+        "long": 0.0029,
+        "mixed": 0.0135
+      }
+    },
+    "medium_run2": {
+      "level": "medium",
+      "turns": 6,
+      "tool_calls": 22,
+      "patches": 1,
+      "wall_clock_s": 239.9,
+      "input": 58920,
+      "cached": 39548,
+      "output": 1555,
+      "thought": 2146,
+      "cost_intro": 0.0797,
+      "cost_dec1": 0.1594,
+      "changed_lines": 19,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 15.02,
+        "long": 677.37,
+        "mixed": 66.7
+      },
+      "median_s": {
+        "short": 0.0446,
+        "long": 0.003,
+        "mixed": 0.0145
+      }
+    },
+    "medium_run3": {
+      "level": "medium",
+      "turns": 6,
+      "tool_calls": 25,
+      "patches": 1,
+      "wall_clock_s": 122.3,
+      "input": 60792,
+      "cached": 39661,
+      "output": 1727,
+      "thought": 0,
+      "cost_intro": 0.0635,
+      "cost_dec1": 0.127,
+      "changed_lines": 23,
+      "accepted": true,
+      "hidden": 13,
+      "speedup": {
+        "short": 14.82,
+        "long": 655.52,
+        "mixed": 65.35
+      },
+      "median_s": {
+        "short": 0.0452,
+        "long": 0.0031,
+        "mixed": 0.0148
+      }
+    }
+  },
+  "by_level": {
+    "medium": {
+      "runs": 3,
+      "accepted": 3,
+      "turns": 6.6667,
+      "tool_calls": 27.6667,
+      "patches": 2,
+      "wall_clock_s": 204.4667,
+      "input": 75881,
+      "cached": 47955.6667,
+      "output": 1901.3333,
+      "thought": 1876.6667,
+      "cost_intro": 0.0984,
+      "cost_dec1": 0.1968,
+      "changed_lines": 23.6667,
+      "long_speedup_range": [
+        655.52,
+        700.72
+      ],
+      "short_speedup_range": [
+        14.82,
+        15.91
+      ],
+      "mixed_speedup_range": [
+        65.35,
+        71.64
+      ]
+    },
+    "high": {
+      "runs": 3,
+      "accepted": 3,
+      "turns": 6.3333,
+      "tool_calls": 35.3333,
+      "patches": 4.6667,
+      "wall_clock_s": 300.3667,
+      "input": 123874,
+      "cached": 83957,
+      "output": 5272,
+      "thought": 14764,
+      "cost_intro": 0.2886,
+      "cost_dec1": 0.5772,
+      "changed_lines": 193.3333,
+      "long_speedup_range": [
+        812.84,
+        812.84
+      ],
+      "short_speedup_range": [
+        16.33,
+        17.35
+      ],
+      "mixed_speedup_range": [
+        76.76,
+        78.0
+      ]
+    }
+  },
+  "total_cost_intro_all_runs": 1.1611
+}

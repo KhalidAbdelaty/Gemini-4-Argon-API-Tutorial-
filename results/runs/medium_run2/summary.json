@@ -1,0 +1,35 @@
+{
+  "thinking_level": "medium",
+  "model": "gemini-4-argon",
+  "stop_reason": "model finished",
+  "turns": 6,
+  "tool_calls": 22,
+  "tool_counts": {
+    "apply_patch": 1,
+    "list_files": 1,
+    "read_file": 9,
+    "run_benchmark": 6,
+    "run_profiler": 3,
+    "run_tests": 1,
+    "show_diff": 1
+  },
+  "patches_applied": 1,
+  "wall_clock_s": 239.9,
+  "usage_totals": {
+    "total_cached_tokens": 39548,
+    "total_input_tokens": 58920,
+    "total_output_tokens": 1555,
+    "total_thought_tokens": 2146,
+    "total_tokens": 62621,
+    "total_tool_use_tokens": 0
+  },
+  "cost_usd_intro": 0.0797,
+  "cost_usd_from_dec_1": 0.1594,
+  "final_report": "### Summary of Changes\n\nProfiling showed that >95% of execution time across all workloads was spent in `CustomerState.get_history()` (`copy.deepcopy(self._events)`) called repeatedly from `CustomerState.has_event()` and `CustomerState.add()` in `eventflow/session.py`.\n\nIn `eventflow/session.py`:\n1. **O(1) duplicate event lookup without deep-copying**: Added a `self._event_ids` set to `CustomerState` so `has_event()` performs an $O(1)$ set membership check instead of deep-copying and linearly scanning the event history on every incoming event.\n2. **Lazy summary computation without deep-copying**: Changed `CustomerState.summary` into a cached `@property` invalidated on `add()`, and passed `self._events` directly to `summarize()` (which does not mutate its input) instead of recomputing `summarize(self.get_history())` on every ingested event.\n3. **Fast-path ordered append**: In `CustomerState.add()`, appended directly to `self._events` when the incoming event is already in `(ts, seq)` order relative to the last event, falling back to `bisect.insort` only for out-of-order arrivals.\n4. **Preserved ownership contract**: `CustomerState.get_history()` continues to return `copy.deepcopy(self._events)` so callers of `history()` receive an independent deep copy.\n\n### Benchmark Results (Before vs. After Medians)\n\n| Workload | Before Median (s) | After Median (s) | Speedup vs. Original | Output Matches |\n| :--- | ---: | ---: | ---: | :--- |\n| `short` | 0.6766 | 0.0478 | 14.20x | `true` |\n| `long` | 2.1358 | 0.0032 | 669.00x | `true` |\n| `mixed` | 1.0379 | 0.0162 | 63.02x | `true` |\n\n### Risks and Limitations\n\n- **Memory overhead**: Tracking seen `event_id` strings in `self._event_ids` adds one set entry per unique accepted event (referencing existing `event.event_id` string objects), which is negligible relative to the stored `Event` objects themselves.\n- **Full resummarization after interleaved `ingest()` + `report()` calls**: When `add()` is called after a report has been generated, `self._summary` is invalidated and `summarize(self._events)` recomputes the summary for that customer on the next `report()` call. This remains $O(N)$ per report rather than $O(N^2)$ across ingestion.",
+  "limits": {
+    "max_turns": 40,
+    "max_patches": 10,
+    "max_wall_clock_s": 2700,
+    "max_spend_usd": 5.0
+  }
+}
