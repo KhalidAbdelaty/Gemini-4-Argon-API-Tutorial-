@@ -31,9 +31,9 @@ def scaling():
         ax.annotate(f"{yi:.2f}s", (xi, yi), textcoords="offset points", xytext=(0, 10),
                     ha="center", color=NAVY)
     ax.set_xticks(x)
-    ax.set_xlabel("Events per customer (1,600 events in every run)")
+    ax.set_xlabel("Events per customer (1,600 events in total each time)")
     ax.set_ylabel("Median seconds")
-    ax.set_title("Original EventFlow: same events, longer histories", color=NAVY, loc="left")
+    ax.set_title("Original EventFlow: same total, longer histories", color=NAVY, loc="left")
     ax.set_ylim(0, max(y) * 1.2)
     fig.tight_layout()
     fig.savefig(OUT / "baseline_scaling.png", dpi=200)
